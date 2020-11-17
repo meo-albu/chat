@@ -1,5 +1,5 @@
 function App() {
-  return 'chat app'
+  return 'chat app '
 }
 
 export default App
