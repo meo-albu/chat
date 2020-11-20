@@ -14,6 +14,7 @@ export default Input
 
 const Container = styled.div`
   position: relative;
+  margin-top: 30px;
 
   label {
     font-size: 13px;
@@ -23,17 +24,17 @@ const Container = styled.div`
     transition: 0.3s;
     left: 20px;
     pointer-events: none;
-    color: ${({theme}) => theme.color}
+    color: ${({theme}) => theme.colorTheme.color};
   }
 
   input {
     border: 0;
-    background: rgb(107, 107, 107);
+    background: ${({theme}) => theme.darkTheme ? '#6B6B6B' : '#FFFFFF'};
+    color: ${({theme}) => theme.colorTheme.color};
     display: block;
     min-width: 450px;
     padding: 12px 20px;
     border-radius: 3px;
-    margin-top: 30px;
 
     @media only screen and (max-width: 700px) {
       min-width: 100%;

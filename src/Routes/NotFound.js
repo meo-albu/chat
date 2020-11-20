@@ -22,6 +22,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  color: white;
+
+  @media only screen and (max-width: 700px) {
+    padding: 10px;
+    justify-content: flex-start;
+  }
 
   >h1 {
     font-size: 5em;

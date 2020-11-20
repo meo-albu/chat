@@ -15,7 +15,7 @@ export default Button
 const Container = styled.button`
    padding: 8px 20px;
    border: 0;
-   background: #42BBB3;
+   background: ${({theme}) => theme.colorTheme.primary};
    color: white;
    border-radius: 3px;
    text-transform: capitalize;
