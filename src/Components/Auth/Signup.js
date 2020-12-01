@@ -6,8 +6,7 @@ import { setUser } from "../../Store/actions/userActions"
 import Button from "../_Reusable/Button/Button"
 import ErrorMessage from "../_Reusable/Errors/ErrorMessage"
 import Input from "../_Reusable/Input"
-import app from './firebase'
-
+import app, { db } from './firebase'
 
 export const Signup = () => {
   const loggedIn = useSelector(state => state.userReducer.loggedIn)
@@ -31,12 +30,26 @@ export const Signup = () => {
           displayName: username.value,
         }).then(() => {
           if(data.user) {
-            const {displayName, email, photoURL} = data.user
+            const {displayName, email, photoURL, uid} = data.user
+
+            db.collection('users').add({
+              username: displayName,
+              image: photoURL,
+              userId: uid,
+              isOnline: true
+            })
+
+            db.collection('connections').add({
+              userId: uid,
+              connections: []
+            })
 
             dispatch(setUser({
               username: displayName,
               email,
-              avatar: photoURL
+              avatar: photoURL,
+              userId: uid,
+              connections: []
             }))
           }
         })
@@ -76,10 +89,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 10px 15%;
+  padding: 10px 10%;
+
+  input {
+    margin-top: 30px;
+    max-width: 450px;
+  }
 
   @media only screen and (max-width: 700px) {
-    padding: 10px 10px;
+    padding: 70px 10px 10px;
     justify-content: flex-start;
   }
 

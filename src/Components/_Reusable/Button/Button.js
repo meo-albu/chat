@@ -20,8 +20,9 @@ const Container = styled.button`
    border-radius: 3px;
    text-transform: capitalize;
    cursor: pointer;
-   transition: filter 0.3s;
+   outline: 0;
+
    :hover {
-      filter: brightness(80%);
+      filter: brightness(90%);
    }
 `

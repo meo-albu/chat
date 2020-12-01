@@ -1,45 +1,39 @@
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { BrowserRouter as Router } from "react-router-dom"
 import styled, { ThemeProvider } from "styled-components"
-import app from "./Components/Auth/firebase"
 import Background from "./Components/Background/Background"
+import Header from "./Components/Header/Header"
 import Loader from "./Components/Loader/Loader"
 import Routes from "./Routes/Routes"
-import { setLoader, stopLoader } from "./Store/actions/loaderActions"
-import { setUser } from "./Store/actions/userActions"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { getUser, checkUserChanges } from "./Store/actions/userActions"
 
 function App() {
   const colorTheme = useSelector(state => state.themeReducer.theme)
   const darkTheme = useSelector(state => state.themeReducer.darkTheme)
   const loading = useSelector(state => state.loaderReducer.loading)
+  const userId = useSelector(state => state.userReducer.user.userId)
+
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(setLoader())
-    app.auth().onAuthStateChanged(user => {
-      if(user) {
-        const {displayName, email, photoURL} = user
-        dispatch(setUser({
-          username: displayName ? displayName : null,
-          email,
-          avatar: photoURL
-        }))
-        dispatch(stopLoader())
-      }
-      dispatch(stopLoader())
-    })
-  }, [dispatch])
+    userId && dispatch(checkUserChanges())
+    dispatch(getUser())
+  }, [dispatch, userId])
 
   return (
     <ThemeProvider theme={{colorTheme, darkTheme}}>
       <Container>
-        <Loader />
         <Background />
         <Main>
-          <Router>
-            <Routes />
-          </Router>
+        {loading 
+          ? <Loader />
+          : <Router>
+              <Header />
+              <Routes />
+            </Router>
+        }
         </Main>
       </Container>
     </ThemeProvider>

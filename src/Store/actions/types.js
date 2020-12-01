@@ -7,6 +7,7 @@ const types = {
   LIGHT_THEME: 'LIGHT_THEME',
   SET_LOADER: 'SET_LOADER',
   STOP_LOADER: 'STOP_LOADER',
+  SET_ACTIVE: 'SET_ACTIVE',
 }
 
 export default types

@@ -1,15 +1,17 @@
 export const darkTheme = {
-  background: '#4D4D4D',
+  background: '#343434',
+  chatBackground: '#15171A',
   color: '#fff',
   primary: '#42BBB3',
-  secondary: '',
+  secondary: '#2D2D2D',
   shadow: 'rgba(0, 0, 0, 0.3)'
 }
 
 export const lightTheme = {
   background: '#E9E9E9',
-  color: '#4D4D4D',
+  chatBackground: '#FFFFFF',
+  color: '#343434',
   primary: '#42BBB3',
-  secondary: '',
+  secondary: '#F9F9F9',
   shadow: 'rgba(0, 0, 0, 0.1)'
 }

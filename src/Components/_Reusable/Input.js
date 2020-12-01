@@ -14,7 +14,6 @@ export default Input
 
 const Container = styled.div`
   position: relative;
-  margin-top: 30px;
 
   label {
     font-size: 13px;
@@ -32,7 +31,7 @@ const Container = styled.div`
     background: ${({theme}) => theme.darkTheme ? '#6B6B6B' : '#FFFFFF'};
     color: ${({theme}) => theme.colorTheme.color};
     display: block;
-    min-width: 450px;
+    width: 100%;
     padding: 12px 20px;
     border-radius: 3px;
 
