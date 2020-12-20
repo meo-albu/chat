@@ -4,7 +4,7 @@ import types from './types'
 
 export const getUser = () => dispatch => {
   dispatch(setLoader())
-  let connections = {}
+  let connections = []
   app.auth().onAuthStateChanged(user => {
     if(user) {
       const {displayName, email, photoURL, uid} = user
@@ -30,21 +30,45 @@ export const getUser = () => dispatch => {
 
 export const checkUserChanges = () => dispatch => {
   const user = app.auth().currentUser
-  let connections = {}
+  let connections = []
   db.collection("connections").where('userId', '==', user.uid)
     .onSnapshot(data => {
         data.forEach(connection => {
           connections = {...connections, connections: connection.data().connections}
           connections.id = connection.id
-          dispatch(setUser({
-            username: user.displayName ? user.displayName : null,
-            email: user.email,
-            avatar: user.photoURL,
-            userId: user.uid,
-            connections
-          }))
+          connections.connections.forEach(conn => {
+            db.collection("users").where('userId', '==', conn.userId)
+              .onSnapshot(data => {
+                  data.forEach(u => {
+                    conn.isOnline = u.data().isOnline
+                    dispatch(setUser({
+                      username: user.displayName ? user.displayName : null,
+                      email: user.email,
+                      avatar: user.photoURL,
+                      userId: user.uid,
+                      connections
+                    }))
+                  })
+              });
+          })
         })
-    });
+    })
+}
+
+export const changeUsersAvailability = async (isOnline) => {
+  let documentId = ''
+  await db.collection('users').where('userId', '==', app.auth().currentUser.uid)
+    .get()
+    .then(data => {
+      data.forEach(user => {
+        documentId = user.id
+      })
+    }).then( async () => {
+      await db.collection('users').doc(documentId)
+      .update({
+        isOnline
+      })
+    })
 }
 
 export const setUser = (user) => {

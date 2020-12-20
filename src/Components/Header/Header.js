@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
-import { logoutUser } from "../../Store/actions/userActions"
+import { changeUsersAvailability, logoutUser } from "../../Store/actions/userActions"
 import app from "../Auth/firebase"
 import Button from "../_Reusable/Button/Button"
 import Logo from "./Logo"
@@ -9,12 +9,19 @@ import Logo from "./Logo"
 const Header = () => {
   const loggedIn = useSelector(state => state.userReducer.loggedIn)
   const dispatch = useDispatch()
+
+  const loguserOut = () => {
+    changeUsersAvailability(false).then(() => {
+      app.auth().signOut().then(() => dispatch(logoutUser()))
+    })
+  }
+
   return (
     <Container>
       <Logo />
       <div>
         {loggedIn ?
-            <Button onClick={() => app.auth().signOut().then(() => dispatch(logoutUser()))}>Logout</Button>
+            <Button onClick={loguserOut}>Logout</Button>
         :
           <>
             <Link to="/signup">Signup</Link> &nbsp;&nbsp;&nbsp;
@@ -41,7 +48,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  @media only screen and (max-width: 700px) {
+  @media only screen and (max-width: 1024px) {
     padding: 10px;
   }
 `

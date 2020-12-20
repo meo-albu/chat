@@ -7,7 +7,7 @@ import Loader from "./Components/Loader/Loader"
 import Routes from "./Routes/Routes"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { getUser, checkUserChanges } from "./Store/actions/userActions"
+import { getUser, checkUserChanges, changeUsersAvailability } from "./Store/actions/userActions"
 
 function App() {
   const colorTheme = useSelector(state => state.themeReducer.theme)
@@ -21,6 +21,13 @@ function App() {
     userId && dispatch(checkUserChanges())
     dispatch(getUser())
   }, [dispatch, userId])
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", function () {
+      changeUsersAvailability(false)
+    })
+  }, [])
+
 
   return (
     <ThemeProvider theme={{colorTheme, darkTheme}}>

@@ -3,11 +3,17 @@ import Connections from "./Connections/Connections"
 // import app, { db } from "../Auth/firebase"
 import Menu from "./Menu/Menu"
 import Settings from "./Settings/Settings"
-// import { useEffect } from "react"
+import { useEffect } from "react"
+import { changeUsersAvailability } from "../../Store/actions/userActions"
+import ChatRoom from "./ChatRoom/ChatRoom"
 
 // import {io} from 'socket.io-client'
 
 const Chat = () => {
+ 
+  useEffect(() => {
+    changeUsersAvailability(true)
+  }, [])
   
   // useEffect(() => {
   //   const socket = io('https://chatsocketserv.herokuapp.com')
@@ -34,7 +40,7 @@ const Chat = () => {
     <Container>
       <ChatContainer>
         <LeftSide><Menu /><Settings /><Connections /> </LeftSide>
-        <div></div>
+        <ChatRoom />
       </ChatContainer>
     </Container>
   )
@@ -59,9 +65,9 @@ const ChatContainer = styled.div`
   box-shadow: 0 0 10px ${({theme}) => theme.colorTheme.shadow};
   display: flex;
 
-  >div:nth-of-type(2) {
-    flex: 2.5;
-    background: ${({theme}) => theme.colorTheme.chatBackground};
+  @media only screen and (max-width: 1024px) {
+    width: 100%;
+    height: 100%;
   }
 
   @media only screen and (max-width: 700px) {
@@ -77,6 +83,10 @@ const LeftSide = styled.div`
   display: flex;
   background: ${({theme}) => theme.colorTheme.background};
   width: 400px;
+
+  @media only screen and (max-width: 1024px) {
+    width: 320px;
+  }
 
   @media only screen and (max-width: 700px) {
     width: 100%;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import app from './firebase'
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { loginUser } from '../../Store/actions/userActions';
+import { changeUsersAvailability, loginUser } from '../../Store/actions/userActions';
 import Input from '../_Reusable/Input';
 import ErrorMessage from '../_Reusable/Errors/ErrorMessage';
 import Button from '../_Reusable/Button/Button';
@@ -26,12 +26,14 @@ export const Login = () => {
     app.auth().signInWithEmailAndPassword(email.value, password.value)
     .then((user) => {
       if(user) {
-        const {displayName, email, photoURL} = user
-        dispatch(loginUser({
-          username: displayName,
-          email,
-          avatar: photoURL
-        }))
+        changeUsersAvailability(true).then(() => {
+          const {displayName, email, photoURL} = user
+          dispatch(loginUser({
+            username: displayName,
+            email,
+            avatar: photoURL
+          }))
+        })
       }
     })
     .catch(function(error) {

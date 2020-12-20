@@ -11,11 +11,12 @@ const Modal = ({setModal}) => {
   
   const connectionId = useSelector(state => state.userReducer.user.connections.id)
   const connectedUsers = useSelector(state => state.userReducer.user.connections.connections)
+  const user = useSelector(state => state.userReducer.user)
   const userId = app.auth().currentUser.uid
   const [error, setError] = useState('')
 
   const checkIfConnectionAlreadyExists = (id) => {
-    return connectedUsers.some(user => user.userId === id)
+    return connectedUsers && connectedUsers.some(user => user.userId === id)
   }
 
   const saveToConnections = (newConnection) => {
@@ -44,13 +45,37 @@ const Modal = ({setModal}) => {
           .get()
           .then(data => {
             data.size > 0
-              ?  data.forEach(user => {
+              ? data.forEach(user => {
                   !checkIfConnectionAlreadyExists(sharedId.value) 
                     ? saveToConnections(user.data())
                     : setError('Connection already exists.')
                 })
               : setError('No user found with this user Id.')
+          }).then(() => {
+            connectTheOtherUser(sharedId.value, {
+              username: user.username,
+              isOnline: true,
+              userId: user.userId,
+              image: user.avatar
+            })
           }).catch(err => setError(err))
+  }
+
+  const connectTheOtherUser = (id, data) => {
+    let docId = ''
+    db.collection('connections')
+    .where('userId', '==', id).get()
+    .then(data => {
+        data.forEach(user => {
+          docId = user.id
+        })
+      }).then(() => {
+        db.collection('connections').doc(docId).get().then(connections => {
+          db.collection('connections').doc(docId).update({
+            connections: [...connections.data().connections, data]
+          })
+        })
+      })
   }
 
   return (
@@ -71,6 +96,7 @@ export default Modal
 
 const Container = styled.div`
   position: absolute;
+  z-index: 102;
   padding: 30px;
   background: ${({theme}) => theme.colorTheme.background};
   box-shadow: 0 0 10px ${({theme}) => theme.colorTheme.shadow};
