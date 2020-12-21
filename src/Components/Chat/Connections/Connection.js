@@ -3,14 +3,14 @@ import styled from "styled-components"
 
 
 
-const Connection = ({name, imagePath, isOnline, onClick}) => {
+const Connection = ({name, imagePath, isOnline, onClick, style}) => {
 
   const getRandomColor = useMemo(() => {
     return `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
   }, [])
 
   return (
-    <Container isOnline={isOnline} onClick={onClick}>
+    <Container isOnline={isOnline} onClick={onClick} style={style}>
       <Image getRandomColor={getRandomColor}>
         {imagePath ? 
           <img src={imagePath} alt={`${name}'s avatar`} />
